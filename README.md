@@ -1,8 +1,10 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:0EA5E9,100:7C3AED&height=200&section=header&text=Ariyan%20Nadeem&fontSize=52&fontColor=FFFFFF&fontAlignY=38&animation=fadeIn&desc=AI%20Systems%20%26%20MLOps%20Engineer&descSize=18&descAlignY=58&descFontColor=A5F3FC" alt="header" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:0EA5E9,100:7C3AED&height=160&section=header&animation=fadeIn" alt="header" />
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=20&pause=1200&color=FFFFFF&center=true&vCenter=true&width=700&lines=Building+CPU-Efficient+%26+Agentic+AI;Adversarial+Robustness+%7C+Edge+TinyML;Production+Systems+from+Lahore+to+the+World" alt="Typing SVG" />
+<img src="https://raw.githubusercontent.com/Ariyan-Pro/Ariyan-Pro/main/gradient-name.svg" alt="Ariyan Nadeem" />
+
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=18&pause=1400&color=A5F3FC&center=true&vCenter=true&width=650&lines=AI+Systems+%26+MLOps+Engineer;Adversarial+ML+%7C+Edge+TinyML+%7C+Agentic+AI" alt="Typing SVG" />
 
 <br/>
 
