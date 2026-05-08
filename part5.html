@@ -38,6 +38,11 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem; color: var(--blue-light);
     letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.3s;
+  }
+  .nav-brand:hover {
+    opacity: 0.8;
   }
   .nav-parts { display: flex; gap: 2rem; }
   .nav-parts a {
@@ -392,13 +397,13 @@
 <body>
 
 <nav>
-  <div class="nav-brand">Ariyan Nadeem — The Story</div>
+  <a href="index.html" class="nav-brand" style="text-decoration:none;">← Hub</a>
   <div class="nav-parts">
-    <a href="story_part1.html">Part I</a>
-    <a href="story_part2.html">Part II</a>
-    <a href="story_part3.html">Part III</a>
-    <a href="story_part4.html">Part IV</a>
-    <a href="story_part5.html" class="active">Part V</a>
+    <a href="part1.html">I</a>
+    <a href="part2.html">II</a>
+    <a href="part3.html">III</a>
+    <a href="part4.html">IV</a>
+    <a href="part5.html" class="active">V</a>
   </div>
 </nav>
 
@@ -576,9 +581,9 @@
 </article>
 
 <div class="page-nav">
-  <a href="story_part4.html" class="back">← Part IV</a>
+  <a href="part4.html" class="back">← Part IV</a>
   <div class="page-nav-info">Part V of V · Pages 9–10 · The End</div>
-  <a href="story_part1.html">Read From the Beginning →</a>
+  <a href="part1.html">Read From the Beginning →</a>
 </div>
 </main>
 
@@ -591,11 +596,11 @@
     <p>AI SYSTEMS ENGINEER · LAHORE, PAKISTAN</p>
     <p>SELF-EMPLOYED · REMOTE · GLOBAL · NOV 2024 – PRESENT</p>
     <div class="all-parts">
-      <a href="story_part1.html">Part I</a>
-      <a href="story_part2.html">Part II</a>
-      <a href="story_part3.html">Part III</a>
-      <a href="story_part4.html">Part IV</a>
-      <a href="story_part5.html">Part V</a>
+      <a href="part1.html">Part I</a>
+      <a href="part2.html">Part II</a>
+      <a href="part3.html">Part III</a>
+      <a href="part4.html">Part IV</a>
+      <a href="part5.html">Part V</a>
     </div>
   </div>
 </footer>
