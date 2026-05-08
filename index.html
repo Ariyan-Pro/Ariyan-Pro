@@ -1,1131 +1,700 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ariyan Nadeem — The Story Hub</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --ink: #0d0d0d;
-    --paper: #f5f0e8;
-    --gold: #c9973a;
-    --gold-light: #e8c06a;
-    --rust: #8b3a1e;
-    --cream: #faf7f0;
-    --muted: #6b6357;
-    --accent-line: #c9973a;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: rgba(0, 0, 0, 0.3);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--ink);
-    color: var(--paper);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
-
-  /* ── CUSTOM CURSOR ── */
-  .cursor {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    border: 1px solid var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.2s ease, background 0.2s ease;
-    mix-blend-mode: difference;
-  }
-
-  .cursor-dot {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-  }
-
-  .cursor.hover {
-    transform: scale(2.5);
-    background: rgba(201, 151, 58, 0.2);
-    border-color: transparent;
-  }
-
-  /* ── SCROLL PROGRESS ── */
-  .scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light));
-    z-index: 1000;
-    transition: width 0.1s ease;
-  }
-
-  /* ── HERO SECTION ── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 4rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(139,58,30,0.25) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 60% at 20% 60%, rgba(201,151,58,0.12) 0%, transparent 60%),
-      linear-gradient(160deg, #0d0d0d 0%, #1a1208 50%, #0d0d0d 100%);
-    z-index: -2;
-  }
-
-  .hero-particles {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    z-index: -1;
-  }
-
-  .particle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: var(--gold);
-    border-radius: 50%;
-    opacity: 0.3;
-    animation: float 15s infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-    50% { transform: translateY(-100px) translateX(50px); opacity: 0.6; }
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    text-align: center;
-    margin-bottom: 1rem;
-    opacity: 0;
-    transform: translateY(50px);
-    animation: fadeUp 1s ease 0.3s forwards;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .hero-subtitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 300;
-    font-style: italic;
-    color: rgba(245,240,232,0.6);
-    text-align: center;
-    max-width: 600px;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp 1s ease 0.5s forwards;
-  }
-
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── BENTO GRID ── */
-  .bento-section {
-    padding: 6rem 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--gold);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 700;
-    color: var(--paper);
-  }
-
-  .bento-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, minmax(200px, auto));
-    gap: 1.5rem;
-  }
-
-  .bento-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  .bento-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: var(--gold);
-    box-shadow: 0 20px 40px var(--glass-shadow), 0 0 30px rgba(201, 151, 58, 0.2);
-  }
-
-  .bento-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s ease;
-  }
-
-  .bento-card:hover::before {
-    left: 100%;
-  }
-
-  .bento-card.large {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-
-  .bento-card.wide {
-    grid-column: span 2;
-  }
-
-  .bento-card.tall {
-    grid-row: span 2;
-  }
-
-  .bento-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 4rem;
-    font-weight: 900;
-    color: rgba(201, 151, 58, 0.15);
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    line-height: 1;
-  }
-
-  .bento-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    display: block;
-  }
-
-  .bento-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--paper);
-    margin-bottom: 0.5rem;
-  }
-
-  .bento-desc {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    font-weight: 300;
-    color: rgba(245, 240, 232, 0.7);
-    line-height: 1.6;
-  }
-
-  .bento-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--gold);
-    text-decoration: none;
-    margin-top: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: gap 0.3s ease;
-  }
-
-  .bento-link:hover {
-    gap: 1rem;
-  }
-
-  .bento-link::after {
-    content: '→';
-    transition: transform 0.3s ease;
-  }
-
-  /* ── TREE NAVIGATION ── */
-  .tree-section {
-    padding: 6rem 2rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  .tree-nav {
-    position: relative;
-    padding-left: 3rem;
-  }
-
-  .tree-nav::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--gold), var(--gold-light), transparent);
-  }
-
-  .tree-item {
-    position: relative;
-    margin-bottom: 3rem;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.5s ease;
-  }
-
-  .tree-item::before {
-    content: '';
-    position: absolute;
-    left: -3rem;
-    top: 0.5rem;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--ink);
-    border: 2px solid var(--gold);
-    transition: all 0.3s ease;
-  }
-
-  .tree-item:hover::before {
-    background: var(--gold);
-    box-shadow: 0 0 20px var(--gold);
-  }
-
-  .tree-item.active::before {
-    background: var(--gold);
-    box-shadow: 0 0 30px var(--gold);
-  }
-
-  .tree-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    padding: 1.5rem 2rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-  }
-
-  .tree-link:hover {
-    background: rgba(201, 151, 58, 0.1);
-    border-color: var(--gold);
-    transform: translateX(10px);
-  }
-
-  .tree-part {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .tree-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--paper);
-    margin-bottom: 0.5rem;
-  }
-
-  .tree-excerpt {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    font-weight: 300;
-    color: rgba(245, 240, 232, 0.6);
-    line-height: 1.6;
-  }
-
-  /* ── 3D CARDS ── */
-  .cards-3d-section {
-    padding: 6rem 2rem;
-    perspective: 1000px;
-  }
-
-  .cards-container {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .card-3d {
-    width: 280px;
-    height: 380px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .card-3d:hover {
-    transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
-  }
-
-  .card-face {
-    position: absolute;
-    inset: 0;
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
-  .card-glow {
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-      rgba(201, 151, 58, 0.3) 0%, 
-      transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  .card-3d:hover .card-glow {
-    opacity: 1;
-  }
-
-  .card-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 5rem;
-    font-weight: 900;
-    color: rgba(201, 151, 58, 0.1);
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-  }
-
-  .card-icon {
-    font-size: 3rem;
-    margin-bottom: auto;
-  }
-
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--paper);
-    margin-bottom: 0.5rem;
-  }
-
-  .card-subtitle {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem;
-    font-weight: 300;
-    color: rgba(245, 240, 232, 0.6);
-    font-style: italic;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    padding: 4rem 2rem;
-    text-align: center;
-    border-top: 1px solid rgba(201, 151, 58, 0.2);
-  }
-
-  .footer-brand {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-
-  .footer-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    color: rgba(245, 240, 232, 0.5);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 1024px) {
-    .bento-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: auto;
-    }
-    
-    .bento-card.large {
-      grid-column: span 2;
-      grid-row: span 1;
-    }
-    
-    .bento-card.wide {
-      grid-column: span 2;
-    }
-    
-    .bento-card.tall {
-      grid-row: span 1;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .cursor, .cursor-dot { display: none; }
-    * { cursor: auto !important; }
-    
-    .bento-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .bento-card.large,
-    .bento-card.wide,
-    .bento-card.tall {
-      grid-column: span 1;
-      grid-row: span 1;
-    }
-    
-    .cards-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-
-  /* ── ANIMATION CLASSES ── */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .stagger-1 { transition-delay: 0.1s; }
-  .stagger-2 { transition-delay: 0.2s; }
-  .stagger-3 { transition-delay: 0.3s; }
-  .stagger-4 { transition-delay: 0.4s; }
-  .stagger-5 { transition-delay: 0.5s; }
-  .stagger-6 { transition-delay: 0.6s; }
-
-  /* ── APPLE-STYLE TEXT GRADIENT ── */
-  .gradient-text {
-    background: linear-gradient(90deg, rgba(201,151,58,0.3) 0%, var(--gold) 25%, var(--gold-light) 50%, var(--gold) 75%, rgba(201,151,58,0.3) 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity: 0.3;
-    transition: opacity 0.5s ease, background-position 0.5s ease;
-  }
-
-  .gradient-text.visible {
-    opacity: 1;
-    animation: shimmer 3s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0%, 100% { background-position: 0% center; }
-    50% { background-position: 200% center; }
-  }
-
-  /* ── SCROLLYTELLING TREE ── */
-  .tree-grow-container {
-    position: relative;
-    padding-left: 3rem;
-  }
-
-  .tree-trunk {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, var(--gold), var(--gold-light));
-    transform-origin: top;
-    transform: scaleY(0);
-    transition: transform 0.1s linear;
-  }
-
-  .tree-leaf {
-    position: absolute;
-    left: -3rem;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--ink);
-    border: 2px solid var(--gold);
-    opacity: 0;
-    transform: scale(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  .tree-leaf.grown {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .tree-leaf::after {
-    content: '';
-    position: absolute;
-    inset: 2px;
-    border-radius: 50%;
-    background: var(--gold);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .tree-leaf.grown::after {
-    opacity: 0.6;
-  }
-
-  /* ── CARD STACK SCROLL ── */
-  .stack-section {
-    perspective: 1500px;
-    overflow: hidden;
-  }
-
-  .stack-container {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .stack-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 3rem;
-    margin-bottom: 2rem;
-    position: sticky;
-    top: 10vh;
-    transform-style: preserve-3d;
-    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-    opacity: 0.5;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-  }
-
-  .stack-card.active {
-    opacity: 1;
-    transform: translateZ(50px) rotateX(0deg);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(201,151,58,0.2);
-    border-color: var(--gold);
-  }
-
-  .stack-card.above {
-    transform: translateZ(-50px) rotateX(-5deg);
-    opacity: 0.3;
-  }
-
-  .stack-card.below {
-    transform: translateZ(50px) rotateX(5deg);
-    opacity: 0.7;
-  }
-
-  /* ── ASYNCHRONOUS BENTO SCROLLING ── */
-  .bento-grid-wrapper {
-    overflow-x: hidden;
-  }
-
-  .bento-column {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    transition: transform 0.1s linear;
-  }
-
-  .bento-column.col-1 { transform: translateY(0); }
-  .bento-column.col-2 { transform: translateY(-20px); }
-  .bento-column.col-3 { transform: translateY(20px); }
-  .bento-column.col-4 { transform: translateY(-10px); }
-
-  /* ── PENTAGRAM ANIMATION OPTIMIZED ── */
-  .pentagram {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    opacity: 0.05;
-    pointer-events: none;
-    animation: pentagramRotate 60s linear infinite;
-  }
-
-  .pentagram svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: var(--gold);
-    stroke-width: 1;
-  }
-
-  @keyframes pentagramRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eternal Cycle - Interactive Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #ffd700;
+            --secondary-gold: #ffec8b;
+            --deep-purple: #1a0a2e;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-glow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Canvas Layers */
+        #fluid-canvas, #particle-canvas, #grid-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #fluid-canvas { z-index: 2; }
+        #particle-canvas { z-index: 3; }
+        #grid-canvas { z-index: 4; }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            perspective: 1000px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold), var(--primary-gold));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+            text-shadow: var(--text-glow);
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards, gradientShift 3s ease infinite;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .bento-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            opacity: 0;
+            transform: translateY(50px) rotateX(10deg);
+        }
+
+        .bento-item.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .bento-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .bento-item:hover::before {
+            left: 100%;
+        }
+
+        .bento-item:hover {
+            transform: translateY(-10px) scale(1.05) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                        0 0 30px rgba(255, 215, 0, 0.2);
+            border-color: var(--primary-gold);
+        }
+
+        .bento-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-gold);
+            transition: all 0.3s ease;
+        }
+
+        .bento-item p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .bento-item .chapter-number {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 3rem;
+            font-weight: bold;
+            color: rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .bento-item:hover .chapter-number {
+            color: rgba(255, 215, 0, 0.3);
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Tree Section */
+        .tree-section {
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .tree-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .tree-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+        }
+
+        .tree-path {
+            fill: none;
+            stroke: var(--primary-gold);
+            stroke-width: 2;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 2s ease;
+        }
+
+        .leaf {
+            fill: var(--primary-gold);
+            opacity: 0;
+            transform-origin: center;
+            transition: all 0.5s ease;
+        }
+
+        /* Pentagram */
+        .pentagram-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .pentagram-svg {
+            width: 100%;
+            height: 100%;
+            animation: rotatePentagram 60s linear infinite;
+        }
+
+        @keyframes rotatePentagram {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--secondary-gold));
+            z-index: 10000;
+            transition: width 0.1s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .cursor, .cursor-dot { display: none; }
+        }
+
+        /* Kinetic Typography */
+        .kinetic-text {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .kinetic-text:hover {
+            transform: scale(1.1) skewX(-5deg);
+        }
+    </style>
 </head>
 <body>
-  <!-- Custom Cursor -->
-  <div class="cursor"></div>
-  <div class="cursor-dot"></div>
+    <!-- Canvas Layers -->
+    <canvas id="grid-canvas"></canvas>
+    <canvas id="fluid-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
 
-  <!-- Scroll Progress -->
-  <div class="scroll-progress"></div>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-particles" id="particles"></div>
-    <div class="pentagram" style="top: 10%; right: 10%;">
-      <svg viewBox="0 0 100 100">
-        <polygon points="50,5 95,38 77,95 23,95 5,38"/>
-        <circle cx="50" cy="50" r="45"/>
-      </svg>
-    </div>
-    <div class="pentagram" style="bottom: 10%; left: 10%; animation-direction: reverse;">
-      <svg viewBox="0 0 100 100">
-        <polygon points="50,5 95,38 77,95 23,95 5,38"/>
-        <circle cx="50" cy="50" r="45"/>
-      </svg>
-    </div>
-    
-    <h1 class="hero-title gradient-text">The Story of<br><em>Ariyan Nadeem</em></h1>
-    <p class="hero-subtitle gradient-text">A journey through vision, innovation, and the relentless pursuit of excellence in technology and leadership</p>
-  </section>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
 
-  <!-- Bento Grid Section -->
-  <section class="bento-section">
-    <div class="section-header fade-in">
-      <p class="section-label gradient-text">Explore the Chapters</p>
-      <h2 class="section-title gradient-text">Five Parts of a Legacy</h2>
+    <!-- Pentagram Background -->
+    <div class="pentagram-container">
+        <svg class="pentagram-svg" viewBox="0 0 200 200">
+            <polygon points="100,10 161.8,47.6 138.2,119.4 61.8,119.4 38.2,47.6" 
+                     fill="none" stroke="#ffd700" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="90" fill="none" stroke="#ffd700" stroke-width="0.3"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="#ffd700" stroke-width="0.3"/>
+            <circle cx="100" cy="100" r="30" fill="none" stroke="#ffd700" stroke-width="0.3"/>
+        </svg>
     </div>
 
-    <div class="bento-grid-wrapper">
-      <div class="bento-grid">
-        <div class="bento-card large fade-in stagger-1 interactive">
-          <span class="bento-number">I</span>
-          <span class="bento-icon">🌱</span>
-          <h3 class="bento-title gradient-text">The Foundation</h3>
-          <p class="bento-desc">From early curiosity to the first sparks of entrepreneurial vision. Discover where it all began.</p>
-          <a href="part1.html" class="bento-link interactive">Read Part I</a>
-        </div>
+    <div class="content-wrapper">
+        <header>
+            <h1 class="kinetic-text">The Eternal Cycle</h1>
+            <p class="subtitle kinetic-text">A Journey Through Time and Memory</p>
+        </header>
 
-        <div class="bento-card fade-in stagger-2 interactive">
-          <span class="bento-number">II</span>
-          <span class="bento-icon">🚀</span>
-          <h3 class="bento-title gradient-text">The Rise</h3>
-          <p class="bento-desc">Building momentum through challenges and breakthroughs.</p>
-          <a href="part2.html" class="bento-link interactive">Read Part II</a>
-        </div>
+        <section class="tree-section">
+            <div class="tree-container">
+                <svg class="tree-svg" viewBox="0 0 200 300">
+                    <path class="tree-path" d="M100,280 Q100,200 80,150 Q60,100 40,80 M100,280 Q100,200 120,150 Q140,100 160,80 M100,280 Q100,220 100,180 Q100,120 100,80"/>
+                    <circle class="leaf" cx="40" cy="80" r="3"/>
+                    <circle class="leaf" cx="60" cy="100" r="4"/>
+                    <circle class="leaf" cx="80" cy="120" r="3"/>
+                    <circle class="leaf" cx="120" cy="120" r="3"/>
+                    <circle class="leaf" cx="140" cy="100" r="4"/>
+                    <circle class="leaf" cx="160" cy="80" r="3"/>
+                    <circle class="leaf" cx="100" cy="60" r="5"/>
+                    <circle class="leaf" cx="70" cy="70" r="3"/>
+                    <circle class="leaf" cx="130" cy="70" r="3"/>
+                </svg>
+            </div>
+        </section>
 
-        <div class="bento-card fade-in stagger-3 interactive">
-          <span class="bento-number">III</span>
-          <span class="bento-icon">💡</span>
-          <h3 class="bento-title gradient-text">Innovation</h3>
-          <p class="bento-desc">Pioneering new approaches in tech and business.</p>
-          <a href="part3.html" class="bento-link interactive">Read Part III</a>
+        <div class="bento-grid">
+            <a href="part1.html" class="bento-item" data-chapter="1">
+                <div class="chapter-number">I</div>
+                <h3 class="kinetic-text">The Beginning</h3>
+                <p>Where all stories start, in the quiet moments before dawn breaks.</p>
+            </a>
+            
+            <a href="part2.html" class="bento-item" data-chapter="2">
+                <div class="chapter-number">II</div>
+                <h3 class="kinetic-text">The Journey</h3>
+                <p>Through valleys of shadow and mountains of light, the path unfolds.</p>
+            </a>
+            
+            <a href="part3.html" class="bento-item" data-chapter="3">
+                <div class="chapter-number">III</div>
+                <h3 class="kinetic-text">The Revelation</h3>
+                <p>Truths long hidden emerge from the depths of forgotten memories.</p>
+            </a>
+            
+            <a href="part4.html" class="bento-item" data-chapter="4">
+                <div class="chapter-number">IV</div>
+                <h3 class="kinetic-text">The Trial</h3>
+                <p>Every hero must face their greatest fear to find their strength.</p>
+            </a>
+            
+            <a href="part5.html" class="bento-item" data-chapter="5">
+                <div class="chapter-number">V</div>
+                <h3 class="kinetic-text">The Return</h3>
+                <p>Circles close as endings become beginnings in the eternal cycle.</p>
+            </a>
         </div>
-
-        <div class="bento-card tall fade-in stagger-4 interactive">
-          <span class="bento-number">IV</span>
-          <span class="bento-icon">🏆</span>
-          <h3 class="bento-title gradient-text">Leadership</h3>
-          <p class="bento-desc">Scaling impact through teams, mentorship, and strategic vision. The art of building organizations that last.</p>
-          <a href="part4.html" class="bento-link interactive">Read Part IV</a>
-        </div>
-
-        <div class="bento-card wide fade-in stagger-5 interactive">
-          <span class="bento-number">V</span>
-          <span class="bento-icon">🌟</span>
-          <h3 class="bento-title gradient-text">The Horizon</h3>
-          <p class="bento-desc">Looking forward—future ambitions, ongoing projects, and the legacy being built today.</p>
-          <a href="part5.html" class="bento-link interactive">Read Part V</a>
-        </div>
-
-        <div class="bento-card fade-in stagger-6 interactive">
-          <span class="bento-icon">📖</span>
-          <h3 class="bento-title gradient-text">Full Story</h3>
-          <p class="bento-desc">Experience the complete narrative in one continuous journey.</p>
-          <a href="index.html" class="bento-link interactive">Read All</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tree Navigation Section with Scrollytelling -->
-  <section class="tree-section">
-    <div class="section-header fade-in">
-      <p class="section-label gradient-text">Navigate</p>
-      <h2 class="section-title gradient-text">Journey Timeline</h2>
     </div>
 
-    <div class="tree-grow-container">
-      <div class="tree-trunk" id="treeTrunk"></div>
-      <nav class="tree-nav">
-        <div class="tree-item fade-in stagger-1 interactive" data-tree-index="0">
-          <div class="tree-leaf" id="leaf0"></div>
-          <a href="part1.html" class="tree-link interactive">
-            <p class="tree-part">Part I • Foundation</p>
-            <h3 class="tree-title gradient-text">The Beginning of Something Greater</h3>
-            <p class="tree-excerpt">Early life, formative experiences, and the seeds of ambition that would grow into something extraordinary.</p>
-          </a>
-        </div>
+    <script>
+        // Custom Cursor with Trail
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        const trails = [];
+        
+        for (let i = 0; i < 20; i++) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            document.body.appendChild(trail);
+            trails.push(trail);
+        }
 
-        <div class="tree-item fade-in stagger-2 interactive" data-tree-index="1">
-          <div class="tree-leaf" id="leaf1"></div>
-          <a href="part2.html" class="tree-link interactive">
-            <p class="tree-part">Part II • Ascent</p>
-            <h3 class="tree-title gradient-text">Climbing Against the Odds</h3>
-            <p class="tree-excerpt">First ventures, critical lessons, and the resilience forged in the fire of real-world challenges.</p>
-          </a>
-        </div>
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
 
-        <div class="tree-item fade-in stagger-3 interactive" data-tree-index="2">
-          <div class="tree-leaf" id="leaf2"></div>
-          <a href="part3.html" class="tree-link interactive">
-            <p class="tree-part">Part III • Breakthrough</p>
-            <h3 class="tree-title gradient-text">Innovation as a Way of Life</h3>
-            <p class="tree-excerpt">Developing unique approaches, creating value, and establishing a distinctive voice in the industry.</p>
-          </a>
-        </div>
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
 
-        <div class="tree-item fade-in stagger-4 interactive" data-tree-index="3">
-          <div class="tree-leaf" id="leaf3"></div>
-          <a href="part4.html" class="tree-link interactive">
-            <p class="tree-part">Part IV • Influence</p>
-            <h3 class="tree-title gradient-text">Leading with Purpose</h3>
-            <p class="tree-excerpt">Building teams, mentoring others, and creating systems that amplify impact beyond individual effort.</p>
-          </a>
-        </div>
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
 
-        <div class="tree-item fade-in stagger-5 interactive" data-tree-index="4">
-          <div class="tree-leaf" id="leaf4"></div>
-          <a href="part5.html" class="tree-link interactive">
-            <p class="tree-part">Part V • Vision</p>
-            <h3 class="tree-title gradient-text">The Future Unwritten</h3>
-            <p class="tree-excerpt">Current endeavors, future aspirations, and the ongoing commitment to making a lasting difference.</p>
-          </a>
-        </div>
-      </nav>
-    </div>
-  </section>
+            // Trail effect
+            let prevX = mouseX, prevY = mouseY;
+            trails.forEach((trail, i) => {
+                const delay = i * 0.05;
+                const x = mouseX + (mouseX - prevX) * delay;
+                const y = mouseY + (mouseY - prevY) * delay;
+                trail.style.left = x + 'px';
+                trail.style.top = y + 'px';
+                trail.style.opacity = 1 - (i / trails.length);
+                trail.style.transform = `translate(-50%, -50%) scale(${1 - i * 0.05})`;
+            });
 
-  <!-- 3D Cards Section with Stack Effect -->
-  <section class="cards-3d-section stack-section">
-    <div class="section-header fade-in">
-      <p class="section-label gradient-text">Quick Access</p>
-      <h2 class="section-title gradient-text">Choose Your Path</h2>
-    </div>
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
 
-    <div class="stack-container">
-      <div class="stack-card" data-stack="0">
-        <div class="card-3d interactive">
-          <div class="card-face">
-            <div class="card-glow"></div>
-            <span class="card-number">I</span>
-            <span class="card-icon">🌱</span>
-            <h3 class="card-title gradient-text">Foundation</h3>
-            <p class="card-subtitle">Where legends begin</p>
-            <a href="part1.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
-          </div>
-        </div>
-      </div>
+        // Canvas Setup
+        const gridCanvas = document.getElementById('grid-canvas');
+        const fluidCanvas = document.getElementById('fluid-canvas');
+        const particleCanvas = document.getElementById('particle-canvas');
+        
+        const gridCtx = gridCanvas.getContext('2d');
+        const fluidCtx = fluidCanvas.getContext('2d');
+        const particleCtx = particleCanvas.getContext('2d');
 
-      <div class="stack-card" data-stack="1">
-        <div class="card-3d interactive">
-          <div class="card-face">
-            <div class="card-glow"></div>
-            <span class="card-number">II</span>
-            <span class="card-icon">🚀</span>
-            <h3 class="card-title gradient-text">Ascent</h3>
-            <p class="card-subtitle">Rising through challenges</p>
-            <a href="part2.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
-          </div>
-        </div>
-      </div>
+        let width, height;
+        let particles = [];
+        let fluidParticles = [];
 
-      <div class="stack-card" data-stack="2">
-        <div class="card-3d interactive">
-          <div class="card-face">
-            <div class="card-glow"></div>
-            <span class="card-number">III</span>
-            <span class="card-icon">💡</span>
-            <h3 class="card-title gradient-text">Innovation</h3>
-            <p class="card-subtitle">Creating the new</p>
-            <a href="part3.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
-          </div>
-        </div>
-      </div>
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            
+            [gridCanvas, fluidCanvas, particleCanvas].forEach(canvas => {
+                canvas.width = width;
+                canvas.height = height;
+            });
+            
+            initParticles();
+            initFluid();
+        }
 
-      <div class="stack-card" data-stack="3">
-        <div class="card-3d interactive">
-          <div class="card-face">
-            <div class="card-glow"></div>
-            <span class="card-number">IV</span>
-            <span class="card-icon">🏆</span>
-            <h3 class="card-title gradient-text">Leadership</h3>
-            <p class="card-subtitle">Amplifying impact</p>
-            <a href="part4.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
-          </div>
-        </div>
-      </div>
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1,
+                    baseX: Math.random() * width,
+                    baseY: Math.random() * height
+                });
+            }
+        }
 
-      <div class="stack-card" data-stack="4">
-        <div class="card-3d interactive">
-          <div class="card-face">
-            <div class="card-glow"></div>
-            <span class="card-number">V</span>
-            <span class="card-icon">🌟</span>
-            <h3 class="card-title gradient-text">Horizon</h3>
-            <p class="card-subtitle">The future awaits</p>
-            <a href="part5.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        function initFluid() {
+            fluidParticles = [];
+            for (let i = 0; i < 50; i++) {
+                fluidParticles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: 0,
+                    vy: 0,
+                    life: 0,
+                    maxLife: 100 + Math.random() * 100
+                });
+            }
+        }
 
-  <!-- Footer -->
-  <footer>
-    <p class="footer-brand gradient-text">Ariyan Nadeem</p>
-    <p class="footer-text">A story of vision, perseverance, and the pursuit of excellence</p>
-  </footer>
+        let mousePos = { x: 0, y: 0 };
+        document.addEventListener('mousemove', (e) => {
+            mousePos.x = e.clientX;
+            mousePos.y = e.clientY;
+        });
 
-<script>
-  // Custom Cursor - Optimized with requestAnimationFrame
-  const cursor = document.querySelector('.cursor');
-  const cursorDot = document.querySelector('.cursor-dot');
-  let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
+        function animateGrid() {
+            gridCtx.clearRect(0, 0, width, height);
+            gridCtx.strokeStyle = 'rgba(255, 215, 0, 0.03)';
+            gridCtx.lineWidth = 1;
+            
+            const gridSize = 50;
+            const distortion = 20;
+            
+            for (let x = 0; x < width; x += gridSize) {
+                gridCtx.beginPath();
+                for (let y = 0; y < height; y += gridSize) {
+                    const dx = x - mousePos.x;
+                    const dy = y - mousePos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const offset = Math.max(0, (distortion * 100) / (dist + 100));
+                    
+                    const newX = x + (dx / dist) * offset;
+                    const newY = y + (dy / dist) * offset;
+                    
+                    if (y === 0) gridCtx.moveTo(newX, newY);
+                    else gridCtx.lineTo(newX, newY);
+                }
+                gridCtx.stroke();
+            }
+            
+            for (let y = 0; y < height; y += gridSize) {
+                gridCtx.beginPath();
+                for (let x = 0; x < width; x += gridSize) {
+                    const dx = x - mousePos.x;
+                    const dy = y - mousePos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const offset = Math.max(0, (distortion * 100) / (dist + 100));
+                    
+                    const newX = x + (dx / dist) * offset;
+                    const newY = y + (dy / dist) * offset;
+                    
+                    if (x === 0) gridCtx.moveTo(newX, newY);
+                    else gridCtx.lineTo(newX, newY);
+                }
+                gridCtx.stroke();
+            }
+            
+            requestAnimationFrame(animateGrid);
+        }
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
+        function animateFluid() {
+            fluidCtx.fillStyle = 'rgba(15, 12, 41, 0.05)';
+            fluidCtx.fillRect(0, 0, width, height);
+            
+            fluidParticles.forEach(p => {
+                const dx = p.x - mousePos.x;
+                const dy = p.y - mousePos.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                
+                if (dist < 100) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (100 - dist) / 100;
+                    p.vx += Math.cos(angle) * force * 2;
+                    p.vy += Math.sin(angle) * force * 2;
+                    p.life = p.maxLife;
+                }
+                
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= 0.95;
+                p.vy *= 0.95;
+                p.life--;
+                
+                if (p.life <= 0 || p.x < 0 || p.x > width || p.y < 0 || p.y > height) {
+                    p.x = Math.random() * width;
+                    p.y = Math.random() * height;
+                    p.vx = 0;
+                    p.vy = 0;
+                    p.life = 0;
+                }
+                
+                const hue = (p.life / p.maxLife) * 60 + 40;
+                const saturation = (p.life / p.maxLife) * 100;
+                const lightness = 50 + (p.life / p.maxLife) * 20;
+                
+                fluidCtx.beginPath();
+                fluidCtx.arc(p.x, p.y, (p.life / p.maxLife) * 20, 0, Math.PI * 2);
+                fluidCtx.fillStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${p.life / p.maxLife * 0.3})`;
+                fluidCtx.fill();
+            });
+            
+            requestAnimationFrame(animateFluid);
+        }
 
-  function animateCursor() {
-    cursorX += (mouseX - cursorX) * 0.1;
-    cursorY += (mouseY - cursorY) * 0.1;
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-    cursorDot.style.left = mouseX + 'px';
-    cursorDot.style.top = mouseY + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
+        function animateParticles() {
+            particleCtx.clearRect(0, 0, width, height);
+            
+            particles.forEach(p => {
+                const dx = mousePos.x - p.baseX;
+                const dy = mousePos.y - p.baseY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                
+                if (dist < 200) {
+                    const angle = Math.atan2(dy, dx);
+                    const force = (200 - dist) / 200;
+                    p.x = p.baseX + Math.cos(angle) * force * 50;
+                    p.y = p.baseY + Math.sin(angle) * force * 50;
+                } else {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+                }
+                
+                particleCtx.beginPath();
+                particleCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                particleCtx.fillStyle = `rgba(255, 215, 0, ${0.3 + Math.sin(Date.now() * 0.001 + p.x) * 0.2})`;
+                particleCtx.fill();
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
 
-  // Cursor hover effect on interactive elements
-  const interactiveElements = document.querySelectorAll('.interactive, a, button');
-  interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-  });
+        // Scroll Effects
+        function updateScrollEffects() {
+            const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            document.querySelector('.scroll-progress').style.width = (scrollProgress * 100) + '%';
+            
+            // Tree animation based on scroll
+            const treeSection = document.querySelector('.tree-section');
+            const treeRect = treeSection.getBoundingClientRect();
+            const treeProgress = Math.max(0, Math.min(1, 1 - (treeRect.top / (window.innerHeight * 0.8))));
+            
+            const treePath = document.querySelector('.tree-path');
+            const pathLength = treePath.getTotalLength();
+            treePath.style.strokeDashoffset = pathLength * (1 - treeProgress);
+            
+            const leaves = document.querySelectorAll('.leaf');
+            leaves.forEach((leaf, i) => {
+                const leafDelay = i * 0.1;
+                if (treeProgress > leafDelay) {
+                    leaf.style.opacity = Math.min(1, (treeProgress - leafDelay) * 3);
+                    leaf.style.transform = `scale(${Math.min(1, (treeProgress - leafDelay) * 2)})`;
+                }
+            });
+            
+            // Bento grid staggered animation
+            const bentoItems = document.querySelectorAll('.bento-item');
+            bentoItems.forEach((item, index) => {
+                const rect = item.getBoundingClientRect();
+                const itemProgress = Math.max(0, Math.min(1, 1 - (rect.top / (window.innerHeight * 1.2))));
+                
+                if (itemProgress > 0.1) {
+                    item.classList.add('visible');
+                    item.style.transitionDelay = `${index * 0.1}s`;
+                } else {
+                    item.classList.remove('visible');
+                }
+            });
+            
+            // Kinetic typography
+            const kineticTexts = document.querySelectorAll('.kinetic-text');
+            kineticTexts.forEach(text => {
+                const rect = text.getBoundingClientRect();
+                const textProgress = Math.max(0, Math.min(1, 1 - (rect.top / (window.innerHeight * 0.8))));
+                
+                if (textProgress > 0.2) {
+                    text.style.backgroundPosition = `${textProgress * 100}% 50%`;
+                }
+            });
+        }
 
-  // Scroll Progress - Throttled with requestAnimationFrame
-  const scrollProgress = document.querySelector('.scroll-progress');
-  let ticking = false;
-  
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        scrollProgress.style.width = scrolled + '%';
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.bento-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // Mouse hover effects on cards
+        document.querySelectorAll('.bento-item').forEach(item => {
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                item.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.05)`;
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+            });
+        });
+
+        // Initialize
+        window.addEventListener('resize', resize);
+        window.addEventListener('scroll', updateScrollEffects);
+        resize();
+        animateGrid();
+        animateFluid();
+        animateParticles();
         updateScrollEffects();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
-
-  // Particles - Reduced count for better performance
-  const particlesContainer = document.getElementById('particles');
-  for (let i = 0; i < 30; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.top = Math.random() * 100 + '%';
-    particle.style.animationDelay = Math.random() * 15 + 's';
-    particle.style.animationDuration = (20 + Math.random() * 10) + 's';
-    particlesContainer.appendChild(particle);
-  }
-
-  // Scroll Animations with Gradient Text Reveal
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        const gradientTexts = entry.target.querySelectorAll('.gradient-text');
-        gradientTexts.forEach(text => text.classList.add('visible'));
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  // 3D Card Mouse Tracking - Optimized
-  document.querySelectorAll('.card-3d').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      card.style.setProperty('--mouse-x', x + '%');
-      card.style.setProperty('--mouse-y', y + '%');
-    });
-  });
-
-  // Tree Navigation Active State
-  const treeItems = document.querySelectorAll('.tree-item');
-  treeItems.forEach(item => {
-    item.addEventListener('click', function() {
-      treeItems.forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
-  // SCROLLYTELLING: Tree Growth Animation driven by scroll
-  const treeTrunk = document.getElementById('treeTrunk');
-  const leaves = document.querySelectorAll('.tree-leaf');
-  const treeSection = document.querySelector('.tree-section');
-  
-  function updateScrollEffects() {
-    // Tree growth effect
-    if (treeSection && treeTrunk && leaves.length > 0) {
-      const rect = treeSection.getBoundingClientRect();
-      const sectionTop = rect.top;
-      const sectionHeight = rect.height;
-      const windowHeight = window.innerHeight;
-      
-      // Calculate progress through tree section (0 to 1)
-      let progress = (windowHeight - sectionTop) / (sectionHeight + windowHeight);
-      progress = Math.max(0, Math.min(1, progress));
-      
-      // Grow the trunk based on scroll
-      treeTrunk.style.transform = `scaleY(${progress})`;
-      
-      // Grow leaves progressively as you scroll
-      leaves.forEach((leaf, index) => {
-        const leafProgress = (index + 1) / leaves.length;
-        if (progress >= leafProgress) {
-          leaf.classList.add('grown');
-        } else {
-          leaf.classList.remove('grown');
-        }
-      });
-    }
-    
-    // CARD STACK SCROLL EFFECT - Cards stack in 3D space
-    const stackCards = document.querySelectorAll('.stack-card');
-    if (stackCards.length > 0) {
-      const viewportCenter = window.innerHeight / 2;
-      
-      stackCards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.top + rect.height / 2;
-        const distanceFromCenter = cardCenter - viewportCenter;
-        
-        card.classList.remove('active', 'above', 'below');
-        
-        if (Math.abs(distanceFromCenter) < 100) {
-          card.classList.add('active');
-        } else if (distanceFromCenter < 0) {
-          card.classList.add('above');
-        } else {
-          card.classList.add('below');
-        }
-      });
-    }
-    
-    // GRADIENT TEXT REVEAL ON SCROLL - Apple-style shimmer reveal
-    const gradientTexts = document.querySelectorAll('.gradient-text');
-    gradientTexts.forEach(text => {
-      const rect = text.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      if (rect.top < viewportHeight * 0.8 && rect.bottom > viewportHeight * 0.2) {
-        text.classList.add('visible');
-      }
-    });
-  }
-
-  // ASYNCHRONOUS BENTO SCROLLING - Different columns move at different speeds
-  const bentoGrid = document.querySelector('.bento-grid');
-  if (bentoGrid) {
-    const cards = Array.from(bentoGrid.querySelectorAll('.bento-card'));
-    const columns = [[], [], [], []];
-    
-    cards.forEach((card, index) => {
-      const colIndex = index % 4;
-      columns[colIndex].push(card);
-    });
-    
-    columns.forEach((col, index) => {
-      col.forEach(card => {
-        card.style.transitionDelay = `${index * 0.05}s`;
-      });
-    });
-  }
-
-  // Initial call to set up effects
-  updateScrollEffects();
-  
-  // Continuous scroll listener for smooth updates
-  window.addEventListener('scroll', () => {
-    requestAnimationFrame(updateScrollEffects);
-  }, { passive: true });
-</script>
+    </script>
 </body>
 </html>
