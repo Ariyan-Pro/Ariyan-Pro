@@ -556,6 +556,161 @@
   .stagger-4 { transition-delay: 0.4s; }
   .stagger-5 { transition-delay: 0.5s; }
   .stagger-6 { transition-delay: 0.6s; }
+
+  /* ── APPLE-STYLE TEXT GRADIENT ── */
+  .gradient-text {
+    background: linear-gradient(90deg, rgba(201,151,58,0.3) 0%, var(--gold) 25%, var(--gold-light) 50%, var(--gold) 75%, rgba(201,151,58,0.3) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.3;
+    transition: opacity 0.5s ease, background-position 0.5s ease;
+  }
+
+  .gradient-text.visible {
+    opacity: 1;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 200% center; }
+  }
+
+  /* ── SCROLLYTELLING TREE ── */
+  .tree-grow-container {
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .tree-trunk {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 0.1s linear;
+  }
+
+  .tree-leaf {
+    position: absolute;
+    left: -3rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: 2px solid var(--gold);
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .tree-leaf.grown {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .tree-leaf::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .tree-leaf.grown::after {
+    opacity: 0.6;
+  }
+
+  /* ── CARD STACK SCROLL ── */
+  .stack-section {
+    perspective: 1500px;
+    overflow: hidden;
+  }
+
+  .stack-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .stack-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 10vh;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0.5;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  .stack-card.active {
+    opacity: 1;
+    transform: translateZ(50px) rotateX(0deg);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px rgba(201,151,58,0.2);
+    border-color: var(--gold);
+  }
+
+  .stack-card.above {
+    transform: translateZ(-50px) rotateX(-5deg);
+    opacity: 0.3;
+  }
+
+  .stack-card.below {
+    transform: translateZ(50px) rotateX(5deg);
+    opacity: 0.7;
+  }
+
+  /* ── ASYNCHRONOUS BENTO SCROLLING ── */
+  .bento-grid-wrapper {
+    overflow-x: hidden;
+  }
+
+  .bento-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: transform 0.1s linear;
+  }
+
+  .bento-column.col-1 { transform: translateY(0); }
+  .bento-column.col-2 { transform: translateY(-20px); }
+  .bento-column.col-3 { transform: translateY(20px); }
+  .bento-column.col-4 { transform: translateY(-10px); }
+
+  /* ── PENTAGRAM ANIMATION OPTIMIZED ── */
+  .pentagram {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    opacity: 0.05;
+    pointer-events: none;
+    animation: pentagramRotate 60s linear infinite;
+  }
+
+  .pentagram svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1;
+  }
+
+  @keyframes pentagramRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
@@ -570,178 +725,210 @@
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-particles" id="particles"></div>
+    <div class="pentagram" style="top: 10%; right: 10%;">
+      <svg viewBox="0 0 100 100">
+        <polygon points="50,5 95,38 77,95 23,95 5,38"/>
+        <circle cx="50" cy="50" r="45"/>
+      </svg>
+    </div>
+    <div class="pentagram" style="bottom: 10%; left: 10%; animation-direction: reverse;">
+      <svg viewBox="0 0 100 100">
+        <polygon points="50,5 95,38 77,95 23,95 5,38"/>
+        <circle cx="50" cy="50" r="45"/>
+      </svg>
+    </div>
     
-    <h1 class="hero-title">The Story of<br><em>Ariyan Nadeem</em></h1>
-    <p class="hero-subtitle">A journey through vision, innovation, and the relentless pursuit of excellence in technology and leadership</p>
+    <h1 class="hero-title gradient-text">The Story of<br><em>Ariyan Nadeem</em></h1>
+    <p class="hero-subtitle gradient-text">A journey through vision, innovation, and the relentless pursuit of excellence in technology and leadership</p>
   </section>
 
   <!-- Bento Grid Section -->
   <section class="bento-section">
     <div class="section-header fade-in">
-      <p class="section-label">Explore the Chapters</p>
-      <h2 class="section-title">Five Parts of a Legacy</h2>
+      <p class="section-label gradient-text">Explore the Chapters</p>
+      <h2 class="section-title gradient-text">Five Parts of a Legacy</h2>
     </div>
 
-    <div class="bento-grid">
-      <div class="bento-card large fade-in stagger-1 interactive">
-        <span class="bento-number">I</span>
-        <span class="bento-icon">🌱</span>
-        <h3 class="bento-title">The Foundation</h3>
-        <p class="bento-desc">From early curiosity to the first sparks of entrepreneurial vision. Discover where it all began.</p>
-        <a href="part1.html" class="bento-link interactive">Read Part I</a>
-      </div>
+    <div class="bento-grid-wrapper">
+      <div class="bento-grid">
+        <div class="bento-card large fade-in stagger-1 interactive">
+          <span class="bento-number">I</span>
+          <span class="bento-icon">🌱</span>
+          <h3 class="bento-title gradient-text">The Foundation</h3>
+          <p class="bento-desc">From early curiosity to the first sparks of entrepreneurial vision. Discover where it all began.</p>
+          <a href="part1.html" class="bento-link interactive">Read Part I</a>
+        </div>
 
-      <div class="bento-card fade-in stagger-2 interactive">
-        <span class="bento-number">II</span>
-        <span class="bento-icon">🚀</span>
-        <h3 class="bento-title">The Rise</h3>
-        <p class="bento-desc">Building momentum through challenges and breakthroughs.</p>
-        <a href="part2.html" class="bento-link interactive">Read Part II</a>
-      </div>
+        <div class="bento-card fade-in stagger-2 interactive">
+          <span class="bento-number">II</span>
+          <span class="bento-icon">🚀</span>
+          <h3 class="bento-title gradient-text">The Rise</h3>
+          <p class="bento-desc">Building momentum through challenges and breakthroughs.</p>
+          <a href="part2.html" class="bento-link interactive">Read Part II</a>
+        </div>
 
-      <div class="bento-card fade-in stagger-3 interactive">
-        <span class="bento-number">III</span>
-        <span class="bento-icon">💡</span>
-        <h3 class="bento-title">Innovation</h3>
-        <p class="bento-desc">Pioneering new approaches in tech and business.</p>
-        <a href="part3.html" class="bento-link interactive">Read Part III</a>
-      </div>
+        <div class="bento-card fade-in stagger-3 interactive">
+          <span class="bento-number">III</span>
+          <span class="bento-icon">💡</span>
+          <h3 class="bento-title gradient-text">Innovation</h3>
+          <p class="bento-desc">Pioneering new approaches in tech and business.</p>
+          <a href="part3.html" class="bento-link interactive">Read Part III</a>
+        </div>
 
-      <div class="bento-card tall fade-in stagger-4 interactive">
-        <span class="bento-number">IV</span>
-        <span class="bento-icon">🏆</span>
-        <h3 class="bento-title">Leadership</h3>
-        <p class="bento-desc">Scaling impact through teams, mentorship, and strategic vision. The art of building organizations that last.</p>
-        <a href="part4.html" class="bento-link interactive">Read Part IV</a>
-      </div>
+        <div class="bento-card tall fade-in stagger-4 interactive">
+          <span class="bento-number">IV</span>
+          <span class="bento-icon">🏆</span>
+          <h3 class="bento-title gradient-text">Leadership</h3>
+          <p class="bento-desc">Scaling impact through teams, mentorship, and strategic vision. The art of building organizations that last.</p>
+          <a href="part4.html" class="bento-link interactive">Read Part IV</a>
+        </div>
 
-      <div class="bento-card wide fade-in stagger-5 interactive">
-        <span class="bento-number">V</span>
-        <span class="bento-icon">🌟</span>
-        <h3 class="bento-title">The Horizon</h3>
-        <p class="bento-desc">Looking forward—future ambitions, ongoing projects, and the legacy being built today.</p>
-        <a href="part5.html" class="bento-link interactive">Read Part V</a>
-      </div>
+        <div class="bento-card wide fade-in stagger-5 interactive">
+          <span class="bento-number">V</span>
+          <span class="bento-icon">🌟</span>
+          <h3 class="bento-title gradient-text">The Horizon</h3>
+          <p class="bento-desc">Looking forward—future ambitions, ongoing projects, and the legacy being built today.</p>
+          <a href="part5.html" class="bento-link interactive">Read Part V</a>
+        </div>
 
-      <div class="bento-card fade-in stagger-6 interactive">
-        <span class="bento-icon">📖</span>
-        <h3 class="bento-title">Full Story</h3>
-        <p class="bento-desc">Experience the complete narrative in one continuous journey.</p>
-        <a href="index.html" class="bento-link interactive">Read All</a>
+        <div class="bento-card fade-in stagger-6 interactive">
+          <span class="bento-icon">📖</span>
+          <h3 class="bento-title gradient-text">Full Story</h3>
+          <p class="bento-desc">Experience the complete narrative in one continuous journey.</p>
+          <a href="index.html" class="bento-link interactive">Read All</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Tree Navigation Section -->
+  <!-- Tree Navigation Section with Scrollytelling -->
   <section class="tree-section">
     <div class="section-header fade-in">
-      <p class="section-label">Navigate</p>
-      <h2 class="section-title">Journey Timeline</h2>
+      <p class="section-label gradient-text">Navigate</p>
+      <h2 class="section-title gradient-text">Journey Timeline</h2>
     </div>
 
-    <nav class="tree-nav">
-      <div class="tree-item fade-in stagger-1 interactive">
-        <a href="part1.html" class="tree-link interactive">
-          <p class="tree-part">Part I • Foundation</p>
-          <h3 class="tree-title">The Beginning of Something Greater</h3>
-          <p class="tree-excerpt">Early life, formative experiences, and the seeds of ambition that would grow into something extraordinary.</p>
-        </a>
-      </div>
+    <div class="tree-grow-container">
+      <div class="tree-trunk" id="treeTrunk"></div>
+      <nav class="tree-nav">
+        <div class="tree-item fade-in stagger-1 interactive" data-tree-index="0">
+          <div class="tree-leaf" id="leaf0"></div>
+          <a href="part1.html" class="tree-link interactive">
+            <p class="tree-part">Part I • Foundation</p>
+            <h3 class="tree-title gradient-text">The Beginning of Something Greater</h3>
+            <p class="tree-excerpt">Early life, formative experiences, and the seeds of ambition that would grow into something extraordinary.</p>
+          </a>
+        </div>
 
-      <div class="tree-item fade-in stagger-2 interactive">
-        <a href="part2.html" class="tree-link interactive">
-          <p class="tree-part">Part II • Ascent</p>
-          <h3 class="tree-title">Climbing Against the Odds</h3>
-          <p class="tree-excerpt">First ventures, critical lessons, and the resilience forged in the fire of real-world challenges.</p>
-        </a>
-      </div>
+        <div class="tree-item fade-in stagger-2 interactive" data-tree-index="1">
+          <div class="tree-leaf" id="leaf1"></div>
+          <a href="part2.html" class="tree-link interactive">
+            <p class="tree-part">Part II • Ascent</p>
+            <h3 class="tree-title gradient-text">Climbing Against the Odds</h3>
+            <p class="tree-excerpt">First ventures, critical lessons, and the resilience forged in the fire of real-world challenges.</p>
+          </a>
+        </div>
 
-      <div class="tree-item fade-in stagger-3 interactive">
-        <a href="part3.html" class="tree-link interactive">
-          <p class="tree-part">Part III • Breakthrough</p>
-          <h3 class="tree-title">Innovation as a Way of Life</h3>
-          <p class="tree-excerpt">Developing unique approaches, creating value, and establishing a distinctive voice in the industry.</p>
-        </a>
-      </div>
+        <div class="tree-item fade-in stagger-3 interactive" data-tree-index="2">
+          <div class="tree-leaf" id="leaf2"></div>
+          <a href="part3.html" class="tree-link interactive">
+            <p class="tree-part">Part III • Breakthrough</p>
+            <h3 class="tree-title gradient-text">Innovation as a Way of Life</h3>
+            <p class="tree-excerpt">Developing unique approaches, creating value, and establishing a distinctive voice in the industry.</p>
+          </a>
+        </div>
 
-      <div class="tree-item fade-in stagger-4 interactive">
-        <a href="part4.html" class="tree-link interactive">
-          <p class="tree-part">Part IV • Influence</p>
-          <h3 class="tree-title">Leading with Purpose</h3>
-          <p class="tree-excerpt">Building teams, mentoring others, and creating systems that amplify impact beyond individual effort.</p>
-        </a>
-      </div>
+        <div class="tree-item fade-in stagger-4 interactive" data-tree-index="3">
+          <div class="tree-leaf" id="leaf3"></div>
+          <a href="part4.html" class="tree-link interactive">
+            <p class="tree-part">Part IV • Influence</p>
+            <h3 class="tree-title gradient-text">Leading with Purpose</h3>
+            <p class="tree-excerpt">Building teams, mentoring others, and creating systems that amplify impact beyond individual effort.</p>
+          </a>
+        </div>
 
-      <div class="tree-item fade-in stagger-5 interactive">
-        <a href="part5.html" class="tree-link interactive">
-          <p class="tree-part">Part V • Vision</p>
-          <h3 class="tree-title">The Future Unwritten</h3>
-          <p class="tree-excerpt">Current endeavors, future aspirations, and the ongoing commitment to making a lasting difference.</p>
-        </a>
-      </div>
-    </nav>
+        <div class="tree-item fade-in stagger-5 interactive" data-tree-index="4">
+          <div class="tree-leaf" id="leaf4"></div>
+          <a href="part5.html" class="tree-link interactive">
+            <p class="tree-part">Part V • Vision</p>
+            <h3 class="tree-title gradient-text">The Future Unwritten</h3>
+            <p class="tree-excerpt">Current endeavors, future aspirations, and the ongoing commitment to making a lasting difference.</p>
+          </a>
+        </div>
+      </nav>
+    </div>
   </section>
 
-  <!-- 3D Cards Section -->
-  <section class="cards-3d-section">
+  <!-- 3D Cards Section with Stack Effect -->
+  <section class="cards-3d-section stack-section">
     <div class="section-header fade-in">
-      <p class="section-label">Quick Access</p>
-      <h2 class="section-title">Choose Your Path</h2>
+      <p class="section-label gradient-text">Quick Access</p>
+      <h2 class="section-title gradient-text">Choose Your Path</h2>
     </div>
 
-    <div class="cards-container">
-      <div class="card-3d fade-in stagger-1 interactive">
-        <div class="card-face">
-          <div class="card-glow"></div>
-          <span class="card-number">I</span>
-          <span class="card-icon">🌱</span>
-          <h3 class="card-title">Foundation</h3>
-          <p class="card-subtitle">Where legends begin</p>
-          <a href="part1.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+    <div class="stack-container">
+      <div class="stack-card" data-stack="0">
+        <div class="card-3d interactive">
+          <div class="card-face">
+            <div class="card-glow"></div>
+            <span class="card-number">I</span>
+            <span class="card-icon">🌱</span>
+            <h3 class="card-title gradient-text">Foundation</h3>
+            <p class="card-subtitle">Where legends begin</p>
+            <a href="part1.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+          </div>
         </div>
       </div>
 
-      <div class="card-3d fade-in stagger-2 interactive">
-        <div class="card-face">
-          <div class="card-glow"></div>
-          <span class="card-number">II</span>
-          <span class="card-icon">🚀</span>
-          <h3 class="card-title">Ascent</h3>
-          <p class="card-subtitle">Rising through challenges</p>
-          <a href="part2.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+      <div class="stack-card" data-stack="1">
+        <div class="card-3d interactive">
+          <div class="card-face">
+            <div class="card-glow"></div>
+            <span class="card-number">II</span>
+            <span class="card-icon">🚀</span>
+            <h3 class="card-title gradient-text">Ascent</h3>
+            <p class="card-subtitle">Rising through challenges</p>
+            <a href="part2.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+          </div>
         </div>
       </div>
 
-      <div class="card-3d fade-in stagger-3 interactive">
-        <div class="card-face">
-          <div class="card-glow"></div>
-          <span class="card-number">III</span>
-          <span class="card-icon">💡</span>
-          <h3 class="card-title">Innovation</h3>
-          <p class="card-subtitle">Creating the new</p>
-          <a href="part3.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+      <div class="stack-card" data-stack="2">
+        <div class="card-3d interactive">
+          <div class="card-face">
+            <div class="card-glow"></div>
+            <span class="card-number">III</span>
+            <span class="card-icon">💡</span>
+            <h3 class="card-title gradient-text">Innovation</h3>
+            <p class="card-subtitle">Creating the new</p>
+            <a href="part3.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+          </div>
         </div>
       </div>
 
-      <div class="card-3d fade-in stagger-4 interactive">
-        <div class="card-face">
-          <div class="card-glow"></div>
-          <span class="card-number">IV</span>
-          <span class="card-icon">🏆</span>
-          <h3 class="card-title">Leadership</h3>
-          <p class="card-subtitle">Amplifying impact</p>
-          <a href="part4.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+      <div class="stack-card" data-stack="3">
+        <div class="card-3d interactive">
+          <div class="card-face">
+            <div class="card-glow"></div>
+            <span class="card-number">IV</span>
+            <span class="card-icon">🏆</span>
+            <h3 class="card-title gradient-text">Leadership</h3>
+            <p class="card-subtitle">Amplifying impact</p>
+            <a href="part4.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+          </div>
         </div>
       </div>
 
-      <div class="card-3d fade-in stagger-5 interactive">
-        <div class="card-face">
-          <div class="card-glow"></div>
-          <span class="card-number">V</span>
-          <span class="card-icon">🌟</span>
-          <h3 class="card-title">Horizon</h3>
-          <p class="card-subtitle">The future awaits</p>
-          <a href="part5.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+      <div class="stack-card" data-stack="4">
+        <div class="card-3d interactive">
+          <div class="card-face">
+            <div class="card-glow"></div>
+            <span class="card-number">V</span>
+            <span class="card-icon">🌟</span>
+            <h3 class="card-title gradient-text">Horizon</h3>
+            <p class="card-subtitle">The future awaits</p>
+            <a href="part5.html" class="bento-link interactive" style="margin-top: 1rem;">Enter →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -749,21 +936,32 @@
 
   <!-- Footer -->
   <footer>
-    <p class="footer-brand">Ariyan Nadeem</p>
+    <p class="footer-brand gradient-text">Ariyan Nadeem</p>
     <p class="footer-text">A story of vision, perseverance, and the pursuit of excellence</p>
   </footer>
 
 <script>
-  // Custom Cursor
+  // Custom Cursor - Optimized with requestAnimationFrame
   const cursor = document.querySelector('.cursor');
   const cursorDot = document.querySelector('.cursor-dot');
-  
+  let mouseX = 0, mouseY = 0;
+  let cursorX = 0, cursorY = 0;
+
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    cursorDot.style.left = e.clientX + 'px';
-    cursorDot.style.top = e.clientY + 'px';
+    mouseX = e.clientX;
+    mouseY = e.clientY;
   });
+
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.1;
+    cursorY += (mouseY - cursorY) * 0.1;
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top = mouseY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
 
   // Cursor hover effect on interactive elements
   const interactiveElements = document.querySelectorAll('.interactive, a, button');
@@ -772,26 +970,35 @@
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 
-  // Scroll Progress
+  // Scroll Progress - Throttled with requestAnimationFrame
   const scrollProgress = document.querySelector('.scroll-progress');
+  let ticking = false;
+  
   window.addEventListener('scroll', () => {
-    const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-    scrollProgress.style.width = scrolled + '%';
-  });
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        scrollProgress.style.width = scrolled + '%';
+        updateScrollEffects();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 
-  // Particles
+  // Particles - Reduced count for better performance
   const particlesContainer = document.getElementById('particles');
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 30; i++) {
     const particle = document.createElement('div');
     particle.className = 'particle';
     particle.style.left = Math.random() * 100 + '%';
     particle.style.top = Math.random() * 100 + '%';
     particle.style.animationDelay = Math.random() * 15 + 's';
-    particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+    particle.style.animationDuration = (20 + Math.random() * 10) + 's';
     particlesContainer.appendChild(particle);
   }
 
-  // Scroll Animations
+  // Scroll Animations with Gradient Text Reveal
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -801,13 +1008,15 @@
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+        const gradientTexts = entry.target.querySelectorAll('.gradient-text');
+        gradientTexts.forEach(text => text.classList.add('visible'));
       }
     });
   }, observerOptions);
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  // 3D Card Mouse Tracking
+  // 3D Card Mouse Tracking - Optimized
   document.querySelectorAll('.card-3d').forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -826,6 +1035,97 @@
       this.classList.add('active');
     });
   });
+
+  // SCROLLYTELLING: Tree Growth Animation driven by scroll
+  const treeTrunk = document.getElementById('treeTrunk');
+  const leaves = document.querySelectorAll('.tree-leaf');
+  const treeSection = document.querySelector('.tree-section');
+  
+  function updateScrollEffects() {
+    // Tree growth effect
+    if (treeSection && treeTrunk && leaves.length > 0) {
+      const rect = treeSection.getBoundingClientRect();
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate progress through tree section (0 to 1)
+      let progress = (windowHeight - sectionTop) / (sectionHeight + windowHeight);
+      progress = Math.max(0, Math.min(1, progress));
+      
+      // Grow the trunk based on scroll
+      treeTrunk.style.transform = `scaleY(${progress})`;
+      
+      // Grow leaves progressively as you scroll
+      leaves.forEach((leaf, index) => {
+        const leafProgress = (index + 1) / leaves.length;
+        if (progress >= leafProgress) {
+          leaf.classList.add('grown');
+        } else {
+          leaf.classList.remove('grown');
+        }
+      });
+    }
+    
+    // CARD STACK SCROLL EFFECT - Cards stack in 3D space
+    const stackCards = document.querySelectorAll('.stack-card');
+    if (stackCards.length > 0) {
+      const viewportCenter = window.innerHeight / 2;
+      
+      stackCards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.top + rect.height / 2;
+        const distanceFromCenter = cardCenter - viewportCenter;
+        
+        card.classList.remove('active', 'above', 'below');
+        
+        if (Math.abs(distanceFromCenter) < 100) {
+          card.classList.add('active');
+        } else if (distanceFromCenter < 0) {
+          card.classList.add('above');
+        } else {
+          card.classList.add('below');
+        }
+      });
+    }
+    
+    // GRADIENT TEXT REVEAL ON SCROLL - Apple-style shimmer reveal
+    const gradientTexts = document.querySelectorAll('.gradient-text');
+    gradientTexts.forEach(text => {
+      const rect = text.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      if (rect.top < viewportHeight * 0.8 && rect.bottom > viewportHeight * 0.2) {
+        text.classList.add('visible');
+      }
+    });
+  }
+
+  // ASYNCHRONOUS BENTO SCROLLING - Different columns move at different speeds
+  const bentoGrid = document.querySelector('.bento-grid');
+  if (bentoGrid) {
+    const cards = Array.from(bentoGrid.querySelectorAll('.bento-card'));
+    const columns = [[], [], [], []];
+    
+    cards.forEach((card, index) => {
+      const colIndex = index % 4;
+      columns[colIndex].push(card);
+    });
+    
+    columns.forEach((col, index) => {
+      col.forEach(card => {
+        card.style.transitionDelay = `${index * 0.05}s`;
+      });
+    });
+  }
+
+  // Initial call to set up effects
+  updateScrollEffects();
+  
+  // Continuous scroll listener for smooth updates
+  window.addEventListener('scroll', () => {
+    requestAnimationFrame(updateScrollEffects);
+  }, { passive: true });
 </script>
 </body>
 </html>
